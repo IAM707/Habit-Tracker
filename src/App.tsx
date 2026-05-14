@@ -73,14 +73,17 @@ function App() {
 
   return (
     <div>
+      {/* Header */}
       <h1>Habit Tracker</h1>
 
+      {/* Search Input */}
       <input
         placeholder="Search"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
 
+      {/* Habit Form */}
       <input
         placeholder="Habit name"
         value={habitName}
@@ -95,19 +98,25 @@ function App() {
 
       <button onClick={handleAddHabit}>Add Habit</button>
 
-      {filteredHabits.map((habit) => (
-        <HabitItem
-          key={habit.id}
-          habit={habit}
-          onDelete={handleDeleteHabit}
-          onToggle={handleToggleHabit}
-          onStartEdit={handleStartEdit}
-          editingHabitId={editingHabitId}
-          editingHabitName={editingHabitName}
-          setEditingHabitName={setEditingHabitName}
-          onSaveEdit={handleSaveEdit}
-        />
-      ))}
+      {/* Habit List */}
+
+      {filteredHabits.length === 0 ? (
+        <p>No habits yet. Add your first habit 🚀</p>
+      ) : (
+        filteredHabits.map((habit) => (
+          <HabitItem
+            key={habit.id}
+            habit={habit}
+            onDelete={handleDeleteHabit}
+            onToggle={handleToggleHabit}
+            onStartEdit={handleStartEdit}
+            editingHabitId={editingHabitId}
+            editingHabitName={editingHabitName}
+            setEditingHabitName={setEditingHabitName}
+            onSaveEdit={handleSaveEdit}
+          />
+        ))
+      )}
     </div>
   );
 }

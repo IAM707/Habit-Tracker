@@ -26,7 +26,7 @@ function HabitItem({
   onSaveEdit,
 }: Props) {
   return (
-    <div>
+    <div className="habit-card">
       {editingHabitId === habit.id ? (
         <>
           <input

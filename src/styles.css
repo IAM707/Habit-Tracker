@@ -1,0 +1,11 @@
+.habit-card {
+    border: 1px solid #ffffff;
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+
+}
+
+.habit-card:hover {
+  background-color: #f9f9f9;
+}
