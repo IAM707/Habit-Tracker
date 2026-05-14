@@ -1,121 +1,114 @@
 import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "./assets/vite.svg";
-import heroImg from "./assets/hero.png";
-import "./App.css";
+import type { Habit } from "./types";
+import HabitItem from "./components/HabitItem";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [habits, setHabits] = useState<Habit[]>([]);
+
+  const [habitName, setHabitName] = useState("");
+  const [category, setCategory] = useState("");
+
+  const [search, setSearch] = useState("");
+
+  const [editingHabitId, setEditingHabitId] = useState<number | null>(null);
+
+  const [editingHabitName, setEditingHabitName] = useState("");
+
+  // ADD
+  function handleAddHabit() {
+    if (!habitName || !category) return;
+
+    const newHabit: Habit = {
+      id: Date.now(),
+      name: habitName,
+      category,
+      completedToday: false,
+    };
+
+    setHabits([...habits, newHabit]);
+
+    setHabitName("");
+    setCategory("");
+  }
+
+  // DELETE
+  function handleDeleteHabit(id: number) {
+    setHabits(habits.filter((h) => h.id !== id));
+  }
+
+  // TOGGLE
+  function handleToggleHabit(id: number) {
+    setHabits(
+      habits.map((h) =>
+        h.id === id
+          ? {
+              ...h,
+              completedToday: !h.completedToday,
+            }
+          : h,
+      ),
+    );
+  }
+
+  // START EDIT
+  function handleStartEdit(habit: Habit) {
+    setEditingHabitId(habit.id);
+    setEditingHabitName(habit.name);
+  }
+
+  // SAVE EDIT
+  function handleSaveEdit(id: number) {
+    setHabits(
+      habits.map((h) => (h.id === id ? { ...h, name: editingHabitName } : h)),
+    );
+
+    setEditingHabitId(null);
+    setEditingHabitName("");
+  }
+
+  // SEARCH FILTER
+  const filteredHabits = habits.filter((h) =>
+    h.name.toLowerCase().includes(search.toLowerCase()),
+  );
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div>
+      <h1>Habit Tracker</h1>
 
-      <div className="ticks"></div>
+      <input
+        placeholder="Search"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+      />
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+      <input
+        placeholder="Habit name"
+        value={habitName}
+        onChange={(e) => setHabitName(e.target.value)}
+      />
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+      <input
+        placeholder="Category"
+        value={category}
+        onChange={(e) => setCategory(e.target.value)}
+      />
+
+      <button onClick={handleAddHabit}>Add Habit</button>
+
+      {filteredHabits.map((habit) => (
+        <HabitItem
+          key={habit.id}
+          habit={habit}
+          onDelete={handleDeleteHabit}
+          onToggle={handleToggleHabit}
+          onStartEdit={handleStartEdit}
+          editingHabitId={editingHabitId}
+          editingHabitName={editingHabitName}
+          setEditingHabitName={setEditingHabitName}
+          onSaveEdit={handleSaveEdit}
+        />
+      ))}
+    </div>
   );
 }
 
