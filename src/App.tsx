@@ -72,51 +72,66 @@ function App() {
   );
 
   return (
-    <div>
-      {/* Header */}
-      <h1>Habit Tracker</h1>
+    <div className="min-h-screen bg-zinc-900 text-white p-6">
+      <div className="max-w-2xl mx-auto">
+        {/* Header */}
+        <h1 className="text-4xl font-bold mb-6">Habit Tracker</h1>
 
-      {/* Search Input */}
-      <input
-        placeholder="Search"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
+        {/* Search Input */}
+        <input
+          className="w-full p-3 rounded-lg bg-zinc-800 mb-6 outline-none"
+          placeholder="Search"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
 
-      {/* Habit Form */}
-      <input
-        placeholder="Habit name"
-        value={habitName}
-        onChange={(e) => setHabitName(e.target.value)}
-      />
+        {/* Habit Form */}
+        <div className="bg-zinc-800 p-4 rounded-xl mb-6 outline-none">
+          <div className="flex flex-col gap-3 ">
+            <input
+              className="p-3 rounded-lg bg-zinc-700 outline-none"
+              placeholder="Habit name"
+              value={habitName}
+              onChange={(e) => setHabitName(e.target.value)}
+            />
 
-      <input
-        placeholder="Category"
-        value={category}
-        onChange={(e) => setCategory(e.target.value)}
-      />
+            <input
+              className="p-3 rounded-lg bg-zinc-700 outline-none"
+              placeholder="Category"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+            />
 
-      <button onClick={handleAddHabit}>Add Habit</button>
+            <button
+              onClick={handleAddHabit}
+              className="bg-red-700 hover:bg-red-900 transition p-1 rounded-lg"
+            >
+              Add Habit
+            </button>
+          </div>
+        </div>
 
-      {/* Habit List */}
-
-      {filteredHabits.length === 0 ? (
-        <p>No habits yet. Add your first habit 🚀</p>
-      ) : (
-        filteredHabits.map((habit) => (
-          <HabitItem
-            key={habit.id}
-            habit={habit}
-            onDelete={handleDeleteHabit}
-            onToggle={handleToggleHabit}
-            onStartEdit={handleStartEdit}
-            editingHabitId={editingHabitId}
-            editingHabitName={editingHabitName}
-            setEditingHabitName={setEditingHabitName}
-            onSaveEdit={handleSaveEdit}
-          />
-        ))
-      )}
+        {/* Habit List */}
+        <div className="flex flex-col gap-4">
+          {filteredHabits.length === 0 ? (
+            <p>No habits yet. Add your first habit 🚀</p>
+          ) : (
+            filteredHabits.map((habit) => (
+              <HabitItem
+                key={habit.id}
+                habit={habit}
+                onDelete={handleDeleteHabit}
+                onToggle={handleToggleHabit}
+                onStartEdit={handleStartEdit}
+                editingHabitId={editingHabitId}
+                editingHabitName={editingHabitName}
+                setEditingHabitName={setEditingHabitName}
+                onSaveEdit={handleSaveEdit}
+              />
+            ))
+          )}
+        </div>
+      </div>
     </div>
   );
 }

@@ -26,7 +26,7 @@ function HabitItem({
   onSaveEdit,
 }: Props) {
   return (
-    <div className="habit-card">
+    <div className="bg-zinc-800 p-4 rounded-xl border border-zinc-700">
       {editingHabitId === habit.id ? (
         <>
           <input
@@ -34,22 +34,42 @@ function HabitItem({
             onChange={(e) => setEditingHabitName(e.target.value)}
           />
 
-          <button onClick={() => onSaveEdit(habit.id)}>Save</button>
+          <button
+            onClick={() => onSaveEdit(habit.id)}
+            className="bg-green-600 px-4 rounded-lg hover:bg-green-800 transition"
+          >
+            Save
+          </button>
         </>
       ) : (
         <>
           <h3>{habit.name}</h3>
           <p>{habit.category}</p>
 
-          <button onClick={() => onStartEdit(habit)}>Edit</button>
+          <button
+            onClick={() => onStartEdit(habit)}
+            className="bg-yellow-600 px-4 rounded-lg hover:bg-yellow-800 transition"
+          >
+            Edit
+          </button>
         </>
       )}
 
       <p>{habit.completedToday ? "✅ Done" : "❌ Not Done"}</p>
 
-      <button onClick={() => onToggle(habit.id)}>Toggle</button>
+      <button
+        onClick={() => onToggle(habit.id)}
+        className="bg-blue-600 px-4 rounded-lg hover:bg-blue-800 transition"
+      >
+        Toggle
+      </button>
 
-      <button onClick={() => onDelete(habit.id)}>Delete</button>
+      <button
+        onClick={() => onDelete(habit.id)}
+        className="bg-red-600 px-4 rounded-lg hover:bg-red-800 transition"
+      >
+        Delete
+      </button>
     </div>
   );
 }
