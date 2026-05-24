@@ -1,5 +1,5 @@
 import type { Habit } from "../types";
-
+import { useRef, useEffect } from "react"; // 1. Import useRef
 type Props = {
   habit: Habit;
 
@@ -25,18 +25,26 @@ function HabitItem({
   setEditingHabitName,
   onSaveEdit,
 }: Props) {
+  const inputRef = useRef<HTMLInputElement>(null); // 2. Create a ref for the input element
+
+  useEffect(() => {
+    if (editingHabitId === habit.id && inputRef.current) {
+      inputRef.current.focus(); // 3. Focus the input when this habit is being edited
+    }
+  }, [editingHabitId, habit.id]);
   return (
     <div className="bg-zinc-800 p-4 rounded-xl border border-zinc-700">
       {editingHabitId === habit.id ? (
         <>
           <input
+            ref={inputRef} // 4. Attach the ref to the input element
             value={editingHabitName}
             onChange={(e) => setEditingHabitName(e.target.value)}
           />
 
           <button
             onClick={() => onSaveEdit(habit.id)}
-            className="bg-green-600 px-4 rounded-lg hover:bg-green-800 transition"
+            className="bg-red-600 px-4 rounded-lg hover:bg-red-800 transition"
           >
             Save
           </button>

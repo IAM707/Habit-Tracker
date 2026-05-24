@@ -1,70 +1,23 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Habit } from "./types";
 import HabitItem from "./components/HabitItem";
-
+import { useHabits } from "./hooks/useHabits";
 function App() {
-  const [habits, setHabits] = useState<Habit[]>([]);
-
-  const [habitName, setHabitName] = useState("");
-  const [category, setCategory] = useState("");
+  const {
+    habits,
+    addHabit,
+    handleDeleteHabit,
+    handleToggleHabit,
+    handleStartEdit,
+    handleSaveEdit,
+    editingHabitId,
+    editingHabitName,
+    setEditingHabitName,
+  } = useHabits();
 
   const [search, setSearch] = useState("");
-
-  const [editingHabitId, setEditingHabitId] = useState<number | null>(null);
-
-  const [editingHabitName, setEditingHabitName] = useState("");
-
-  // ADD
-  function handleAddHabit() {
-    if (!habitName || !category) return;
-
-    const newHabit: Habit = {
-      id: Date.now(),
-      name: habitName,
-      category,
-      completedToday: false,
-    };
-
-    setHabits([...habits, newHabit]);
-
-    setHabitName("");
-    setCategory("");
-  }
-
-  // DELETE
-  function handleDeleteHabit(id: number) {
-    setHabits(habits.filter((h) => h.id !== id));
-  }
-
-  // TOGGLE
-  function handleToggleHabit(id: number) {
-    setHabits(
-      habits.map((h) =>
-        h.id === id
-          ? {
-              ...h,
-              completedToday: !h.completedToday,
-            }
-          : h,
-      ),
-    );
-  }
-
-  // START EDIT
-  function handleStartEdit(habit: Habit) {
-    setEditingHabitId(habit.id);
-    setEditingHabitName(habit.name);
-  }
-
-  // SAVE EDIT
-  function handleSaveEdit(id: number) {
-    setHabits(
-      habits.map((h) => (h.id === id ? { ...h, name: editingHabitName } : h)),
-    );
-
-    setEditingHabitId(null);
-    setEditingHabitName("");
-  }
+  const [habitName, setHabitName] = useState("");
+  const [category, setCategory] = useState("");
 
   // SEARCH FILTER
   const filteredHabits = habits.filter((h) =>
@@ -103,7 +56,12 @@ function App() {
             />
 
             <button
-              onClick={handleAddHabit}
+              onClick={() => {
+                addHabit(habitName, category);
+
+                setHabitName("");
+                setCategory("");
+              }}
               className="bg-red-700 hover:bg-red-900 transition p-1 rounded-lg"
             >
               Add Habit
